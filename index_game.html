@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Roller Coaster Tycoon</title>
+
+<style type="text/css">
+	#preloader { 
+	position: fixed; 
+	left: 0; 
+	top: 0; 
+	z-index: 999; 
+	width: 100%; 
+	height: 100%; 
+	overflow: visible; 
+	background: #000 url('images_game/logo2.png') no-repeat center center; 
+	opacity: 20%;
+	background-size: 60% 115%;
+	background-position: center center;
+	animation: shrink 1s infinite alternate;
+	}
+	
+	@keyframes shrink{
+		0% {
+			background-size: 60% 115%;
+		}
+		100% {
+			background-size: 40% 77%;
+		}
+	}
+	
+	
+	
+</style>
+
+<script type="text/javascript" src="js_game/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="js_game/keyboard.js"></script>
+<script type="text/javascript" src="js_game/utility.js"></script>
+<script type="text/javascript" src="js_game/canvas.js"></script>
+<script type="text/javascript" src="js_game/animate.js"></script>
+<script type="text/javascript" src="js_game/spritesheet.js"></script>
+<script type="text/javascript" src="js_game/sprite.js"></script>
+<script type="text/javascript" src="js_game/rides.js"></script>
+<script type="text/javascript" src="js_game/base.js"></script>
+<script type="text/javascript" src="js_game/world.js"></script>
+<script type="text/javascript" src="js_game/background.js"></script>
+<script type="text/javascript" src="js_game/wall.js"></script>
+<script type="text/javascript" src="js_game/wall_b.js"></script>
+<script type="text/javascript" src="js_game/logout.js"></script>
+<script type="text/javascript">	
+if(document.cookie == "{}" || document.cookie.toString().length == 0 ){
+	alert("not logged in");
+	window.location = "index.html";
+}
+	var Context = null;
+	
+	var BLOCK_W = 32;
+	var BLOCK_H = 32;
+	
+	var ride1_x = 1210;
+	var ride1_y = 150;
+	
+	var ride2_x = 1210;
+	var ride2_y = 250;
+	
+	var ride3_x = 1210;
+	var ride3_y = 460;
+	
+	var ride4_x = 1190;
+	var ride4_y = 565;
+	
+	var ride5_x = 1210;
+	var ride5_y = 350;
+	
+	var currency = 10000;	
+	
+	var back = new SpriteSheet("images_game/back.png");
+	
+	var bg = new SpriteSheet("images_game/back2.png");
+	var logo = new SpriteSheet("images_game/lo1.png");
+	
+	var cur1 = new SpriteSheet("images_game/coin1.png");
+	var cur2 = new SpriteSheet("images_game/coin2.png");
+	
+	var name_banner = new SpriteSheet("images_game/banner.png");
+	
+	var arrowBase = new Base("images_game/ring.png");
+	
+	var ride1 = new SpriteSheet("images_game/ride1.png");
+	var ride2 = new SpriteSheet("images_game/ride2.png");
+	var ride3 = new SpriteSheet("images_game/ride3.png");
+	var ride4 = new SpriteSheet("images_game/ride4.png");
+	var ride5 = new SpriteSheet("images_game/ride5.png");
+	
+	var aud = new Audio("audio/coins.mp3");
+	
+	var dash1 = new SpriteSheet("images_game/dash1.png");
+	var dash2 = new SpriteSheet("images_game/dash2.png");
+	var dash3 = new SpriteSheet("images_game/dash3.png");
+	var dash4 = new SpriteSheet("images_game/dash4.png");
+	var dash5 = new SpriteSheet("images_game/dash5.png");
+		
+	var flag1 = true;
+	var flag2 = true;
+	var flag3 = true;
+	var flag4 = true;
+	var flag5 = true;
+	
+	var ride1_flag = false;
+	var ride1_cur_flag = false;
+	
+	var ride2_flag = false;
+	var ride2_cur_flag = false;
+	
+	var ride3_flag = false;
+	var ride3_cur_flag = false;
+	
+	var ride4_flag = false;
+	var ride4_cur_flag = false;
+	
+	var ride5_flag = false;
+	var ride5_cur_flag = false;
+	
+	
+
+	
+	$(document).ready(function(){		
+		console.log("dom ready");			
+	});
+	
+	$(window).on('load',(function(){
+		
+		$('#preloader').fadeOut('slow',function(){$(this).remove();});
+		
+		Context = new HTML("game", 1366, 700);
+		
+		intializeKeyboard();
+		
+		disableScrollBars();
+		
+		InitializeAnimationCounters();
+		
+		
+		
+			Context.canvas.addEventListener("mousedown", doMouseDown, false);
+			function doMouseDown(event){
+				canvas_x = event.pageX;
+				canvas_y = event.pageY;
+				//alert("X = " + canvas_x + "Y = " + canvas_y);
+				
+				if(canvas_x >= 10 && canvas_x <= 70 && canvas_y >= 10 && canvas_y <= 70){
+					window.location = "menu.html";
+				}
+				
+				if(canvas_x >= 1210 && canvas_x <= 1310 && canvas_y >= 150 && canvas_y <= 238){
+					ride1_flag = true;
+					ride2_flag = false;
+					ride3_flag = false;
+					ride5_flag = false;
+				}
+				
+				if(canvas_x >= 1210 && canvas_x <= 1310 && canvas_y >= 250 && canvas_y <= 340){
+					ride2_flag = true;
+					ride1_flag = false;
+					ride3_flag = false;
+					ride5_flag = false;
+				}
+				
+				if(canvas_x >= 1210 && canvas_x <= 1321 && canvas_y >= 350 && canvas_y <= 450){
+					ride5_flag = true;
+					ride1_flag = false;
+					ride2_flag = false;
+					ride3_flag = false;
+				}
+				
+				if(canvas_x >= 1210 && canvas_x <= 1321 && canvas_y >= 460 && canvas_y <= 560){
+					ride3_flag = true;
+					ride1_flag = false;
+					ride2_flag = false;
+					ride5_flag = false;
+				}
+				
+				if(canvas_x >= 1160 && canvas_x <= 1350 && canvas_y >= 570 && canvas_y <= 670){
+					ride4_flag = true;
+					ride1_flag = false;
+					ride2_flag = false;
+					ride3_flag = false;
+					ride5_flag = false;
+				}
+				
+				if(ride2_cur_flag && canvas_x >= 480 && canvas_x <= 617 && canvas_y >= 96 && canvas_y <= 214){
+					currency += 10;
+					aud.play();
+				}
+		}		
+		
+	}));	
+	
+	setInterval(function(){
+		
+		ResetAnimationCounter();		
+		
+		bg.draw(0, 0, 1366, 700, 1, 1, [0]);	
+		
+		DrawMap();			
+		
+		back.draw(10, 10, 200, 200, 1, 3.5, [0]);
+		
+		//Code for Ride1
+		var ride1_arr = [];
+		for(i=0; i<66; i++){
+			ride1_arr.push(i);
+		}
+		if(ride1_x >= 300 && ride1_x <= 340 && ride1_y >= 240 && ride1_y <= 270){
+			if(flag1){
+				currency -= 500;
+				aud.play();
+				flag1 = false;
+				ride1_flag = false;
+			}		
+			ride1.draw(300, 240, 305, 262, 8, 6, ride1_arr);
+			dash1.draw(1210, 150, 297, 264, 1, 3, [0]);
+		}
+		else if(ride1_flag){
+			arrowBase.draw(310,250);
+			if(key.left){	ride1_x -= 5;	}
+			if(key.right){	ride1_x += 5;	}						
+			if(key.up){	ride1_y -= 5;	}
+			if(key.down){	ride1_y += 5;	}					
+			dash1.draw(1210, 150, 297, 264, 1, 3, [0]);
+			dash1.draw(ride1_x, ride1_y, 297, 264, 1, 3, [0]);
+		}
+		else{
+			dash1.draw(1210, 150, 297, 264, 1, 3, [0]);
+		}
+		
+		
+		//Code for Ride2
+		var ride2_arr = [];
+		for(i=0; i<320; i++){
+			ride2_arr.push(i);
+		}
+		
+		if(ride2_x >= 250 && ride2_x <= 280 && ride2_y >= 350 && ride2_y <= 380){
+			if(flag2){				
+				currency -= 500;
+				aud.play()
+				flag2 = false;
+				ride2_flag = false;
+			}		
+			ride2.draw(250, 350, 274, 236, 17, 4, ride2_arr);
+			dash2.draw(1210, 250, 309, 274, 1, 3, [0]);
+			ride2_cur_flag = true;
+			
+		}
+		else if(ride2_flag){
+			arrowBase.draw(260,360);
+			if(key.left){	ride2_x -= 5;	}
+			if(key.right){	ride2_x += 5;	}						
+			if(key.up){	ride2_y -= 5;	}
+			if(key.down){	ride2_y += 5;	}				
+			dash2.draw(1210, 250, 309, 274, 1, 3, [0]);
+			dash2.draw(ride2_x, ride2_y, 309, 274, 1, 3, [0]);
+		}
+		else{
+			dash2.draw(1210, 250, 309, 274, 1, 3, [0]);
+		}	
+		
+		//Code for Ride3
+		var ride3_arr = [];
+		for(i=0; i<320; i++){
+			ride3_arr.push(i);
+		}		
+		if(ride3_x >= 600 && ride3_x <= 670 && ride3_y >= 260 && ride3_y <= 330){
+			if(flag3){
+				currency -= 500;
+				aud.play();
+				flag3 = false;
+				ride3_flag = false;
+			}					
+			ride3.draw(620, 280, 257, 209, 18, 4, ride3_arr);
+			dash3.draw(1210, 460, 249, 221, 1, 2.5, [0]);
+		}
+		else if(ride3_flag){
+			arrowBase.draw(630,290);
+			if(key.left){	ride3_x -= 5;	}
+			if(key.right){	ride3_x += 5;	}						
+			if(key.up){	ride3_y -= 5;	}
+			if(key.down){	ride3_y += 5;	}
+			dash3.draw(1210, 460, 249, 221, 1, 2.5, [0]);
+			dash3.draw(ride3_x, ride3_y, 249, 221, 1, 2.5, [0]);
+		}
+		else{
+			dash3.draw(1210, 460, 249, 221, 1, 2.5, [0]);
+		}
+			
+	
+	
+	//Code for ride 4
+	
+	var ride4_arr = [];
+	for(i=0; i<337; i++){
+		ride4_arr.push(i);
+	}
+	
+	if(ride4_x >= 520 && ride4_x <= 560 && ride4_y >= 490 && ride4_y <= 540){
+		if(flag4){				
+			currency -= 500;
+			aud.play()
+			flag4 = false;
+			ride4_flag = false;
+		}		
+		ride4.draw(470, 440, 394, 203, 13, 2, ride4_arr);
+		dash4.draw(1190, 565, 300, 150, 1, 2, [0]);
+		ride4_cur_flag = true;
+		
+	}
+	else if(ride4_flag){
+		arrowBase.draw(530,500);
+		if(key.left){	ride4_x -= 5;	}
+		if(key.right){	ride4_x += 5;	}						
+		if(key.up){	ride4_y -= 5;	}
+		if(key.down){	ride4_y += 5;	}	
+		dash4.draw(ride4_x, ride4_y, 300, 150, 1, 2, [0]);
+		dash4.draw(1190, 565, 300, 150, 1, 2, [0]);
+	}
+	else{
+		dash4.draw(1190, 565, 300, 150, 1, 2, [0]);
+	}
+	
+	
+
+	//Code for ride5
+	
+	var ride5_arr = [];
+	for(i=0; i<127; i++){
+		ride5_arr.push(i);
+	}
+	if(ride5_x >= 690 && ride5_x <= 740 && ride5_y >= 360 && ride5_y <= 400){
+		if(flag5){				
+			currency -= 500;
+			aud.play()
+			flag5 = false;
+			ride5_flag = false;
+		}		
+		ride5.draw(700, 370, 299, 220, 10, 3, ride5_arr);
+		dash5.draw(1210, 350, 333, 296, 1, 3.2, [0]);
+		ride5_cur_flag = true;
+		
+	}
+	else if(ride5_flag){
+		arrowBase.draw(710,380);
+		if(key.left){	ride5_x -= 5;	}
+		if(key.right){	ride5_x += 5;	}						
+		if(key.up){	ride5_y -= 5;	}
+		if(key.down){	ride5_y += 5;	}	
+		dash5.draw(ride5_x, ride5_y, 333, 296, 1, 3.2, [0]);
+		dash5.draw(1210, 350, 333, 296, 1, 3.2, [0]);
+	}
+	else{
+		dash5.draw(1210, 350, 333, 296, 1, 3.2, [0]);
+	}
+	
+	//Drawing of Logo
+	logo.draw(20, 540, 512, 512, 1, 4, [0]);
+
+	
+	},10);	
+</script>
+</head>
+<body style="margin: 0px">
+	<div id="preloader">
+  </div>
+	<canvas id="game" ></canvas>
+</body>
+</html>

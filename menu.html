@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+<head>
+<title>Roller Coaster Tycoon</title>
+<script type="text/javascript" src="js/shared/jquery.js"></script>
+<script type="text/javascript" src="js/shared/bootstrap.js"></script>
+<script type="text/javascript" src="js/shared/angular.js"></script>
+<script type="text/javascript" src="js/shared/angular-route.js"></script>
+
+<script type="text/javascript" src="js/user/Properties.js"></script>
+<script type="text/javascript" src="js/user/Application.js"></script>
+<script type="text/javascript" src="js/user/Controller.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+<link rel="stylesheet" href="css/style1.css">
+<script type="text/javascript">
+if(document.cookie == "{}" || document.cookie.toString().length == 0 ){
+	alert("Please Login");
+	window.location = "index.html";
+}
+
+var str1 = document.cookie.toString().substr("myCookie=".length, document.cookie.toString().length);
+var obj = JSON.parse(str1);
+alert(str1);
+alert(obj);
+
+</script>
+
+</head>
+
+<style>
+.hexagon {
+	width: 200px;
+	height: 400px;
+	overflow: hidden;
+	visibility: hidden;
+	transform: rotate(120deg);
+	display: inline-block;
+	list-style-type: none;
+}
+
+.hexagon-in1 {
+	display: block;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	transform: rotate(-60deg);
+	text-decoration: none;
+}
+
+.hexagon-in2 {
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-image: url("img/bg/g1.gif");
+	overflow: hidden;
+	visibility: visible;
+	line-height: 400px;
+	font-family: 'Capriola', sans-serif;
+	font-size: 1.5em;
+	color: #fff;
+	text-shadow: 1px 1px #000;
+	transform: rotate(-60deg);
+	transition: 1.5s ease-out;
+}
+
+li:nth-child(1) span {
+	background-position: -45px center;
+}
+
+li:nth-child(2) span {
+	background-position: -115px center;
+}
+
+li:nth-child(3) span {
+	background-position: -185px center;
+}
+
+li:nth-child(4) span {
+	background-position: -30px center;
+}
+
+li:nth-child(5) span {
+	background-position: -130px center;
+}
+
+.hexagon-in2:hover {
+	background-position: -700px center;
+	color: #fffff;
+}
+
+#lis {
+	text-align: center;
+}
+</style>
+
+<body background="img/bg/bub.png" style="color: #b6b6b6;" ng-app="Application" ng-controller="RollerCoasterController">
+
+	<div class="container-fluid">
+		<div class="row" style="margin-top: 2%;">
+			<div class="col-md-10 col-md-offset-1"
+				style="background-color: white; opacity: 0.4; height: 80px;"></div>
+			<div style="position: absolute;">
+				<img src="img/im.png"
+					style="height: 60px; width: 140px; margin-left: 120px; margin-top: -10px;" />
+				<img src="img/logo/logo.png"
+					style="height: 80px; width: 150px; margin-top: 10px;" /> <img
+					src="img/ty.png"
+					style="height: 30px; width: 80px; margin-left: -45px; -webkit-transform: rotate(-10deg); margin-bottom: -30px;" />
+
+			</div>
+		</div>
+
+
+		<ul id="lis">
+			<li class="hexagon"><a class="hexagon-in1" href="index_game.html"><span
+					class="hexagon-in2">New Game</span></a></li>
+			<li class="hexagon"><a class="hexagon-in1" href="#"><span
+					class="hexagon-in2">Load Game</span></a></li>
+			<li class="hexagon"><a class="hexagon-in1" href="#"><span
+					class="hexagon-in2">Options</span></a></li>
+			<li class="hexagon"><a class="hexagon-in1" href="#popup1"><span
+					class="hexagon-in2">Credits</span></a></li>
+			<li class="hexagon"><a class="hexagon-in1" href="#" ng-click="logout()"><span
+					class="hexagon-in2">Quit</span></a></li>
+		</ul>
+		<div id="popup1" class="overlay">
+                     <div class="popup">
+                           <h2>You are left with {{1000}} coins.</h2>
+                           <a class="close" href="#">&times;</a>
+                     </div>
+              </div>
+<div class="col-md-10 col-md-offset-1"
+				style="background-color: black; opacity: 0.85; height: 80px;"></div>
+	</div>
+
+
+<div class="content">
+  <div class="content__container">
+    <label class="content__container__text">
+      Hello
+    </label>
+    
+    <ul class="content__container__list">
+      <li class="content__container__list__item">Player !</li>
+      <li class="content__container__list__item" style="color: yellow;"><script type="text/javascript">document.write(obj['loadgame']);</script> !</li>
+      <li class="content__container__list__item">User !</li>
+      <li class="content__container__list__item">Gamer !</li>
+    </ul>
+  </div>
+</div>
+
+
+</body>
+</html>
