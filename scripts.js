@@ -1,3 +1,4 @@
+    $(document).ready(function(e) {   
 // ************************************************
 // Shopping Cart API
 // ************************************************
@@ -141,6 +142,7 @@ var shoppingCart = (function() {
 // ***************************************** 
 // Add item
 $('.add-to-cart').click(function(event) {
+  alert("here");
   event.preventDefault();
   var name = $(this).data('name');
   var price = Number($(this).data('price'));
@@ -205,4 +207,5 @@ $('.show-cart').on("change", ".item-count", function(event) {
   displayCart();
 });
 
-displayCart();
+	displayCart();
+	});
